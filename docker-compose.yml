@@ -1,0 +1,38 @@
+version: "3"
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    user: "1000:1000"
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=2y
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/data:/prometheus
+    depends_on:
+      - scaap
+  grafana:  
+    image: grafana/grafana
+    restart: unless-stopped
+    user: "1000:1000"
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+  scaap:
+    image: ghcr.io/ecyshor/scaap:latest
+    ports:
+      - "3030:3030"
+    volumes:
+      - .:/etc/scaap/:ro
+    restart: unless-stopped
+    devices:
+      - "/dev/i2c-1:/dev/i2c-1"
+

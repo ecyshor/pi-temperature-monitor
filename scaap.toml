@@ -1,0 +1,4 @@
+[[script]]
+name = "temperature"
+command = "python3"
+arguments = ["/etc/scaap/read-temp.py"] 
