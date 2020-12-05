@@ -25,14 +25,14 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./grafana/data:/var/lib/grafana
+      - ./grafana/data:/var/lib/grafana #grafana data storage
   scaap:
     image: ghcr.io/ecyshor/scaap:latest
     ports:
       - "3030:3030"
     volumes:
-      - .:/etc/scaap/:ro
+      - .:/etc/scaap/:ro # map the config and scripts
     restart: unless-stopped
     devices:
-      - "/dev/i2c-1:/dev/i2c-1"
+      - "/dev/i2c-1:/dev/i2c-1" #map the sensor inside the container so we can access it
 
